@@ -37,24 +37,14 @@ export default async function NextGame() {
           </p>
 
           <h2 className="mb-4 text-2xl font-bold sm:text-3xl md:text-4xl">
-            {nextGame.title}
+	          📅 {formattedDate} • {formattedTime}
           </h2>
-
-          <p className="mb-2 text-sm text-zinc-400 sm:text-base">
-            📅 {formattedDate} • {formattedTime}
-          </p>
 
           <p className="mb-6 max-w-2xl text-sm text-zinc-300 sm:text-base">
             📍 {nextGame.location}
-            {nextGame.description && (
-              <>
-                <br />
-                {nextGame.description}
-              </>
-            )}
           </p>
 
-          <button className="w-full rounded-2xl bg-red-500 px-6 py-3 font-semibold text-white transition hover:bg-red-600 sm:w-auto">
+          <button className="w-full rounded-2xl bg-white px-6 py-3 font-semibold text-black transition hover:bg-zinc-200 sm:w-auto">
             Забронировать место
           </button>
         </div>
