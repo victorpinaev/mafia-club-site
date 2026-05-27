@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mafia Kharkiv",
+  title: "Mafia Lyubotin",
   description: "Клуб спортивной мафии",
 };
 

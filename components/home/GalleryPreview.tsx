@@ -1,3 +1,11 @@
+import Image from "next/image";
+
+const photos = [
+  "/images/games/gal_1.jpg",
+  "/images/games/gal_2.jpg",
+  "/images/games/gal_3.jpg",
+];
+
 export default function GalleryPreview() {
   return (
     <section>
@@ -13,9 +21,22 @@ export default function GalleryPreview() {
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="aspect-[4/5] rounded-3xl bg-zinc-800" />
-          <div className="aspect-[4/5] rounded-3xl bg-zinc-800" />
-          <div className="aspect-[4/5] rounded-3xl bg-zinc-800 sm:col-span-2 lg:col-span-1" />
+          {photos.map((photo) => (
+            <div
+              key={photo}
+              className="group overflow-hidden rounded-3xl"
+            >
+              <div className="aspect-[4/5]">
+                <Image
+                  src={photo}
+                  alt="Mafia game"
+                  width={800}
+                  height={1000}
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
