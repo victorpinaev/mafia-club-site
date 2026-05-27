@@ -2,31 +2,22 @@
 
 import { db } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { parseEuropeKyivDateTime } from '@/lib/date';
 
-export async function createGame(
-  title: string,
-  dateString: string,
-  location: string,
-  description?: string
-) {
+export async function createGame(dateString: string) {
   try {
     // Валидация
-    if (!title?.trim()) throw new Error('Название обязательно');
     if (!dateString) throw new Error('Дата обязательна');
-    if (!location?.trim()) throw new Error('Локация обязательна');
 
-    // Преобразовать datetime-local в ISO Date
-    const date = new Date(dateString);
+    // Преобразовать datetime-local в дату UTC, используя часовой пояс Europe/Kyiv
+    const date = parseEuropeKyivDateTime(dateString);
     if (isNaN(date.getTime())) {
       throw new Error('Неверный формат даты');
     }
 
     const game = await db.game.create({
       data: {
-        title: title.trim(),
         date,
-        location: location.trim(),
-        description: description?.trim() || null,
         isActive: true,
       },
     });

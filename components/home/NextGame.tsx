@@ -1,4 +1,5 @@
 import { db } from '@/lib/prisma';
+import { formatGameDate } from '@/lib/format-game-date';
 
 export default async function NextGame() {
   const nextGame = await db.game.findFirst({
@@ -17,16 +18,7 @@ export default async function NextGame() {
     return null;
   }
 
-  const formattedDate = new Date(nextGame.date).toLocaleDateString('ru-RU', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  });
-
-  const formattedTime = new Date(nextGame.date).toLocaleTimeString('ru-RU', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  const formattedDateTime = formatGameDate(nextGame.date);
 
   return (
     <section className="border-y border-zinc-800 bg-zinc-900">
@@ -37,12 +29,8 @@ export default async function NextGame() {
           </p>
 
           <h2 className="mb-4 text-2xl font-bold sm:text-3xl md:text-4xl">
-	          📅 {formattedDate} • {formattedTime}
+            📅 {formattedDateTime}
           </h2>
-
-          <p className="mb-6 max-w-2xl text-sm text-zinc-300 sm:text-base">
-            📍 {nextGame.location}
-          </p>
 
           <button className="w-full rounded-2xl bg-white px-6 py-3 font-semibold text-black transition hover:bg-zinc-200 sm:w-auto">
             Забронировать место

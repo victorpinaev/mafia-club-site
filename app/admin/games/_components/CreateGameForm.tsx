@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { createGame } from '../_actions/gameActions';
 
 export default function CreateGameForm() {
@@ -8,11 +9,9 @@ export default function CreateGameForm() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [formData, setFormData] = useState({
-    title: '',
     date: '',
-    location: '',
-    description: '',
   });
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -27,20 +26,15 @@ export default function CreateGameForm() {
 
     try {
       // Валидация
-      if (!formData.title.trim()) throw new Error('Укажите название игры');
       if (!formData.date) throw new Error('Укажите дату');
-      if (!formData.location.trim()) throw new Error('Укажите локацию');
 
-      const result = await createGame(
-        formData.title,
-        formData.date,
-        formData.location,
-        formData.description
-      );
+      const result = await createGame(formData.date);
 
       if (result.success) {
         setSuccess('Игра успешно создана!');
-        setFormData({ title: '', date: '', location: '', description: '' });
+        setFormData({ date: '' });
+        // Обновить страницу, чтобы серверный компонент перезагрузил данные
+        router.refresh();
         setTimeout(() => setSuccess(''), 3000);
       } else {
         setError(result.error || 'Ошибка при создании');
@@ -55,19 +49,6 @@ export default function CreateGameForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-zinc-300 text-sm mb-2">Название игры *</label>
-        <input
-          type="text"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          disabled={loading}
-          className="w-full bg-zinc-800 border border-zinc-700 text-white px-3 py-2 rounded focus:outline-none focus:border-red-500"
-          placeholder="Игра #5"
-        />
-      </div>
-
-      <div>
         <label className="block text-zinc-300 text-sm mb-2">Дата и время *</label>
         <input
           type="datetime-local"
@@ -76,32 +57,6 @@ export default function CreateGameForm() {
           onChange={handleChange}
           disabled={loading}
           className="w-full bg-zinc-800 border border-zinc-700 text-white px-3 py-2 rounded focus:outline-none focus:border-red-500"
-        />
-      </div>
-
-      <div>
-        <label className="block text-zinc-300 text-sm mb-2">Локация *</label>
-        <input
-          type="text"
-          name="location"
-          value={formData.location}
-          onChange={handleChange}
-          disabled={loading}
-          className="w-full bg-zinc-800 border border-zinc-700 text-white px-3 py-2 rounded focus:outline-none focus:border-red-500"
-          placeholder="Адрес проведения"
-        />
-      </div>
-
-      <div>
-        <label className="block text-zinc-300 text-sm mb-2">Описание</label>
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          disabled={loading}
-          className="w-full bg-zinc-800 border border-zinc-700 text-white px-3 py-2 rounded focus:outline-none focus:border-red-500"
-          placeholder="Опционально"
-          rows={3}
         />
       </div>
 
